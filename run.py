@@ -14,22 +14,7 @@ from actions import get_my_orders
 
 
 
-def main():
-    updater = Updater(bot_token)
-    jobs = updater.job_queue
-    #jobs.run_repeating(sender_to_channel, 60)
-    dp = updater.dispatcher
-    dp.add_handler(CommandHandler("start", start))
-    dp.add_handler(CommandHandler("getgold", get_gold))
-    dp.add_handler(CommandHandler("everyday", get_everyday))
-    dp.add_handler(MessageHandler([Filters.text], get_my_orders))
-    dp.add_handler(MessageHandler([Filters.group], get_my_orders))
-    # dp.add_handler(CallbackQueryHandler(router_callbacks))
-    updater.start_polling()
-    updater.idle()
-
-
-def main1(token):
+def main(token):
     updater = Updater(token)
     jobs = updater.job_queue
     #jobs.run_repeating(sender_to_channel, 60)
@@ -40,15 +25,11 @@ def main1(token):
     dp.add_handler(MessageHandler([Filters.text], get_my_orders))
     dp.add_handler(MessageHandler([Filters.group], get_my_orders))
     # dp.add_handler(CallbackQueryHandler(router_callbacks))
-    updater.start_polling()
+    updater.start_polling(poll_interval=10.0)
     updater.idle()
 
 if __name__ == '__main__':
     if len(sys.argv) > 1:
         main(sys.argv[1])
     else:
-        main1(os.getenv("TOKEN"))
-        
-
-    #print(sys.argv[0])
-    # main(sys.argv[0])
+        main(os.getenv("TOKEN"))
