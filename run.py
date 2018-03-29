@@ -5,7 +5,6 @@ from telegram.ext import *
 
 from jobs import start, get_gold, get_everyday
 from actions import get_my_orders
-from configs import *
 
 
 # logging.basicConfig(
@@ -48,8 +47,8 @@ if __name__ == '__main__':
     if len(sys.argv) > 1:
         main(sys.argv[1])
     else:
-        #os.getenv("TOKEN")
-        main()
+        main1(os.getenv("TOKEN"))
+        
 
     #print(sys.argv[0])
     # main(sys.argv[0])
