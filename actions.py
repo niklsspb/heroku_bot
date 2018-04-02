@@ -253,6 +253,14 @@ def get_my_orders(bot, update):
             else:
                 bot.sendMessage(chat_id=uid_from_update(update), text='Нужно камней мироздания = '+result,
                                 reply_to_message_id=update.message.message_id)
+        if reply_text.lower()=='пуха 30 па':
+            response = calc_weapon_cost()
+             if chat_type == "group":
+                bot.sendMessage(chat_id=group_chat_id(update), text='Домопуха 30 па обойдется в сумму = '+response,
+                                reply_to_message_id=update.message.message_id)
+            else:
+                bot.sendMessage(chat_id=uid_from_update(update), text='Домопуха 30 па обойдется в сумму = '+response,
+                                reply_to_message_id=update.message.message_id)
 
     else:
         pass
@@ -299,3 +307,41 @@ def uid_from_update(update):
                 except (NameError, AttributeError):
                     logging.error("No chat_id available in update.")
     return chat_id
+
+def calc_weapon_cost():
+    """
+    оружие на 30 па
+    Требуется:
+    400 - Кровавый камень
+        1 кровавый камень крафтится из:
+            1 фрагмента кровавого камня (небо), ID в котобазе 50249
+            1 фрагмента кровавого камня (море), ID в котобазе 50251
+    240 - Огненный камень
+        1 огненный камень крафтится из:
+            1 фрагмента огненного камня (небо), ID в котобазе 50255
+            1 фрагмента огненного камня (море), ID в котобазе 50257
+    120 - Небесная яшма
+        крафтится из небесная яшма синяя, ID в котобазе 50259
+    и 20кк
+    """
+    blood_stone = 400
+    flame_stone = 240
+    jasper = 120
+    sum_blood_stone = calc(blood_stone, 50249) + calc(blood_stone, 50251)
+    sum_flame_stone = calc(flame_stone, 50255) + calc(flame_stone, 50257)
+    sum_jasper = calc(flame_stone, 50259)
+    return int(sum_blood_stone)+int(sum_flame_stone)+int(sum_jasper)+20000000
+
+
+def calc(count, ID):
+    url = "https://pwcats.info/drakon"
+    url = url+'/'+str(ID)
+    g = Grab()
+    g.go(url, user_agent='Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/62.0.3202.94 YaBrowser/17.11.1.990 Yowser/2.5 Safari/537.36')
+    cost_list = g.doc.select('//*[@id = "sort_adw"]/tbody/tr[*]/td[5]/text()').node_list()
+    for i in range(0, cost_list.__len__()):
+        string = cost_list[i].replace(' ', '')
+        cost_list[i] = int(string)
+    # print(cost_list)
+    print(min(cost_list))
+    return min(cost_list)*count
