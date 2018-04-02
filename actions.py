@@ -208,7 +208,7 @@ def get_my_orders(bot, update):
     global results
     check_date()
     reply_text = update.message.text
-    if len(reply_text) <= 10:
+    if len(reply_text) <= 12:
         chat_type = get_chat_type(update)
         if reply_text == "Кто по еже" or reply_text == "кто по еже" or reply_text == "ежа":
             if results is None:
