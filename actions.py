@@ -256,10 +256,10 @@ def get_my_orders(bot, update):
         if reply_text.lower()=='пуха 30 па':
             response = calc_weapon_cost()
             if chat_type == "group":
-                bot.sendMessage(chat_id=group_chat_id(update), text='Домопуха 30 па обойдется в сумму = '+response,
+                bot.sendMessage(chat_id=group_chat_id(update), text=response,
                                 reply_to_message_id=update.message.message_id)
             else:
-                bot.sendMessage(chat_id=uid_from_update(update), text='Домопуха 30 па обойдется в сумму = '+response,
+                bot.sendMessage(chat_id=uid_from_update(update), text=response,
                                 reply_to_message_id=update.message.message_id)
 
     else:
