@@ -329,8 +329,9 @@ def calc_weapon_cost():
     jasper = 120
     sum_blood_stone = calc(blood_stone, 50249) + calc(blood_stone, 50251)
     sum_flame_stone = calc(flame_stone, 50255) + calc(flame_stone, 50257)
-    sum_jasper = calc(flame_stone, 50259)
-    return str(int(sum_blood_stone)+int(sum_flame_stone)+int(sum_jasper)+20000000)
+    sum_jasper = calc(jasper, 50259)
+    return 'Купить 400 Кровавых камней выйдет за сумму ='+sum_blood_stone+'\n'+'Купить 240 Огненных камней выйдет за сумму = '+sum_flame_stone+'\n'+'Купить 120 небесной яшмы выйдет за сумму = '+sum_jasper+'\n'+'За крафт пухи 20кк'+'\n'+'Итого сумма = '+str(int(sum_blood_stone)+int(sum_flame_stone)+int(sum_jasper)+20000000)
+    #return str(int(sum_blood_stone)+int(sum_flame_stone)+int(sum_jasper)+20000000)
 
 
 def calc(count, ID):
