@@ -330,7 +330,7 @@ def calc_weapon_cost():
     sum_blood_stone = calc(blood_stone, 50249) + calc(blood_stone, 50251)
     sum_flame_stone = calc(flame_stone, 50255) + calc(flame_stone, 50257)
     sum_jasper = calc(flame_stone, 50259)
-    return int(sum_blood_stone)+int(sum_flame_stone)+int(sum_jasper)+20000000
+    return str(int(sum_blood_stone)+int(sum_flame_stone)+int(sum_jasper)+20000000)
 
 
 def calc(count, ID):
