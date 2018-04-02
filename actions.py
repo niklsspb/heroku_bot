@@ -83,18 +83,18 @@ dictionary = {'кх 1': 'Зал героев',
               'кх 70': 'Город Инея'
               }
 
-stones = {"перенос +1": "1",
-          "перенос +2": "5",
-          "перенос +3": "12",
-          "перенос +4": "28",
-          "перенос +5": "60",
-          "перенос +6": "80",
-          "перенос +7": "100",
-          "перенос +8": "150",
-          "перенос +9": "250",
-          "перенос +10": "400",
-          "перенос +11": "650",
-          "перенос +12": "1000"
+stones = {'перенос +1': '1',
+          'перенос +2': '5',
+          'перенос +3': '12',
+          'перенос +4': '28',
+          'перенос +5': '60',
+          'перенос +6': '80',
+          'перенос +7': '100',
+          'перенос +8': '150',
+          'перенос +9': '250',
+          'перенос +10': '400',
+          'перенос +11': '650',
+          'перенос +12': '1000'
           }
 
 logging.basicConfig(
@@ -246,6 +246,7 @@ def get_my_orders(bot, update):
                                 reply_to_message_id=update.message.message_id)
         if reply_text.startswith("перенос") or reply_text.startswith("Перенос") or reply_text.startswith("ПЕРЕНОС"):
             result = stones.get(reply_text.lower())
+            print(result)
             if chat_type == "group":
                 bot.sendMessage(chat_id=group_chat_id(update), text='Нужно камней мироздания = '+result,
                                 reply_to_message_id=update.message.message_id)
