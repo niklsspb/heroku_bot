@@ -41,15 +41,20 @@ def get_every_day():
          user_agent='Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/62.0.3202.94 '
                     'YaBrowser/17.11.1.990 Yowser/2.5 Safari/537.36')
     # list = g.doc.body.decode('cp1251')
-    image = g.doc.select('.//*[@id="wall_fixed"]/div/div/div/div/div[2]/div/div/div/div[2]/a/@onclick')[0].text()
-    caption = g.doc.select('.//*[@id="wall_fixed"]/div/div/div/div/div[2]/div/div/div/div[1]')[0].text()
-    date_time = datetime.datetime.now()
-    date_post = date_time.date()
-    json_string = get_indexes(image)
-    res = json.loads(json_string)
-    result = res['temp']['y_']
-    url_image = url + result[0] + '.jpg'
-    return url_image
+    try:
+        image = g.doc.select(
+            './/*[@id="wall_fixed"]/div/div/div/div/div[2]/div/div/div/div[2]/a/@onclick')[0].text()
+        caption = g.doc.select(
+            './/*[@id="wall_fixed"]/div/div/div/div/div[2]/div/div/div/div[1]')[0].text()
+        date_time = datetime.datetime.now()
+        date_post = date_time.date()
+        json_string = get_indexes(image)
+        res = json.loads(json_string)
+        result = res['temp']['y_']
+        url_image = url + result[0] + '.jpg'
+        return url_image
+    except IndexError:
+        return None
 
 
 def uid_from_update(update):
@@ -97,13 +102,22 @@ def get_everyday(bot, update):
     chat_type = get_chat_type(update)
     if results is None:
         results = get_every_day()
-        if chat_type == "group":
-            bot.sendPhoto(chat_id=group_chat_id(update), photo=results,
-                          reply_to_message_id=update.message.message_id,
-                          caption=caption)
+        if results is not None:
+            if chat_type == "group":
+                bot.sendPhoto(chat_id=group_chat_id(update), photo=results,
+                              reply_to_message_id=update.message.message_id,
+                              caption=caption)
+            else:
+                bot.sendPhoto(chat_id=uid_from_update(update), photo=results,
+                              reply_to_message_id=update.message.message_id, caption=caption)
         else:
-            bot.sendPhoto(chat_id=uid_from_update(update), photo=results,
-                          reply_to_message_id=update.message.message_id, caption=caption)
+            if chat_type == "group":
+                bot.sendMessage(chat_id=group_chat_id(update), text="Ошибка, повторите позже",
+                                reply_to_message_id=update.message.message_id,
+                                caption=caption)
+            else:
+                bot.sendMessage(chat_id=uid_from_update(update), text="Ошибка, повторите позже",
+                                reply_to_message_id=update.message.message_id, caption=caption)
     else:
         if chat_type == "group":
             bot.sendPhoto(chat_id=group_chat_id(update), photo=results,

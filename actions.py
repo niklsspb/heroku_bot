@@ -43,7 +43,7 @@ dictionary = {'кх 1': 'Зал героев',
               'кх 30': 'Да',
               'кх 31': 'Право выбирать постройки для улучшения',
               'кх 32': 'Вклад участников гильдии',
-              'кх 33': 'Да',
+              'кх 33': 'Зал героев',
               'кх 34': 'Саблю для фехтования',
               'кх 35': 'Древние',
               'кх 36': 'В одна тысяча сорок четвертом',
@@ -83,6 +83,20 @@ dictionary = {'кх 1': 'Зал героев',
               'кх 70': 'Город Инея'
               } """
 
+stones = {'перенос +1': '1',
+          'перенос +2': '5',
+          'перенос +3': '12',
+          'перенос +4': '28',
+          'перенос +5': '60',
+          'перенос +6': '80',
+          'перенос +7': '100',
+          'перенос +8': '150',
+          'перенос +9': '250',
+          'перенос +10': '400',
+          'перенос +11': '650',
+          'перенос +12': '1000'
+          }
+
 logging.basicConfig(
     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
     level=logging.DEBUG)
@@ -90,6 +104,7 @@ logger = logging.getLogger(__name__)
 
 
 def get_chat_type(update):
+    
     chat_type = None
     try:
         chat_type = update.message.chat.type
@@ -126,15 +141,20 @@ def get_every_day():
          user_agent='Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/62.0.3202.94 '
                     'YaBrowser/17.11.1.990 Yowser/2.5 Safari/537.36')
     # list = g.doc.body.decode('cp1251')
-    image = g.doc.select('.//*[@id="wall_fixed"]/div/div/div/div/div[2]/div/div/div/div[2]/a/@onclick')[0].text()
-    caption = g.doc.select('.//*[@id="wall_fixed"]/div/div/div/div/div[2]/div/div/div/div[1]')[0].text()
-    date_time = datetime.datetime.now()
-    date_post = date_time.date()
-    json_string = get_indexes(image)
-    res = json.loads(json_string)
-    result = res['temp']['y_']
-    url_image = url + result[0] + '.jpg'
-    return url_image
+    try:
+        image = g.doc.select(
+            './/*[@id="wall_fixed"]/div/div/div/div/div[2]/div/div/div/div[2]/a/@onclick')[0].text()
+        caption = g.doc.select(
+            './/*[@id="wall_fixed"]/div/div/div/div/div[2]/div/div/div/div[1]')[0].text()
+        date_time = datetime.datetime.now()
+        date_post = date_time.date()
+        json_string = get_indexes(image)
+        res = json.loads(json_string)
+        result = res['temp']['y_']
+        url_image = url + result[0] + '.jpg'
+        return url_image
+    except IndexError:
+        return None
 
 
 def get_course_gold():
@@ -194,18 +214,27 @@ def get_my_orders(bot, update):
     global results
     check_date()
     reply_text = update.message.text
-    if len(reply_text) <= 10:
+    if len(reply_text) <= 12:
         chat_type = get_chat_type(update)
         if reply_text == "Кто по еже" or reply_text == "кто по еже" or reply_text == "ежа":
             if results is None:
                 results = get_every_day()
-                if chat_type == "group":
-                    bot.sendPhoto(chat_id=group_chat_id(update), photo=results,
-                                  reply_to_message_id=update.message.message_id,
-                                  caption=caption)
+                if results is not None:
+                    if chat_type == "group":
+                        bot.sendPhoto(chat_id=group_chat_id(update), photo=results,
+                                      reply_to_message_id=update.message.message_id,
+                                      caption=caption)
+                    else:
+                        bot.sendPhoto(chat_id=uid_from_update(update), photo=results,
+                                      reply_to_message_id=update.message.message_id, caption=caption)
                 else:
-                    bot.sendPhoto(chat_id=uid_from_update(update), photo=results,
-                                  reply_to_message_id=update.message.message_id, caption=caption)
+                    if chat_type == "group":
+                        bot.sendMessage(chat_id=group_chat_id(update), text="Ошибка, повторите позже",
+                                        reply_to_message_id=update.message.message_id,
+                                        caption=caption)
+                    else:
+                        bot.sendMessage(chat_id=uid_from_update(update), text="Ошибка, повторите позже",
+                                        reply_to_message_id=update.message.message_id, caption=caption)
             else:
                 if chat_type == "group":
                     bot.sendPhoto(chat_id=group_chat_id(update), photo=results,
@@ -224,6 +253,23 @@ def get_my_orders(bot, update):
         #                        reply_to_message_id=update.message.message_id)
         if reply_text == "Голд" or reply_text == "голд":
             response = get_course_gold()
+            if chat_type == "group":
+                bot.sendMessage(chat_id=group_chat_id(update), text=response,
+                                reply_to_message_id=update.message.message_id)
+            else:
+                bot.sendMessage(chat_id=uid_from_update(update), text=response,
+                                reply_to_message_id=update.message.message_id)
+        if reply_text.startswith("перенос") or reply_text.startswith("Перенос") or reply_text.startswith("ПЕРЕНОС"):
+            result = stones.get(reply_text.lower())
+            print(result)
+            if chat_type == "group":
+                bot.sendMessage(chat_id=group_chat_id(update), text='Нужно камней мироздания = '+result,
+                                reply_to_message_id=update.message.message_id)
+            else:
+                bot.sendMessage(chat_id=uid_from_update(update), text='Нужно камней мироздания = '+result,
+                                reply_to_message_id=update.message.message_id)
+        if reply_text.lower()=='пуха 30 па':
+            response = calc_weapon_cost()
             if chat_type == "group":
                 bot.sendMessage(chat_id=group_chat_id(update), text=response,
                                 reply_to_message_id=update.message.message_id)
@@ -276,3 +322,42 @@ def uid_from_update(update):
                 except (NameError, AttributeError):
                     logging.error("No chat_id available in update.")
     return chat_id
+
+def calc_weapon_cost():
+    """
+    оружие на 30 па
+    Требуется:
+    400 - Кровавый камень
+        1 кровавый камень крафтится из:
+            1 фрагмента кровавого камня (небо), ID в котобазе 50249
+            1 фрагмента кровавого камня (море), ID в котобазе 50251
+    240 - Огненный камень
+        1 огненный камень крафтится из:
+            1 фрагмента огненного камня (небо), ID в котобазе 50255
+            1 фрагмента огненного камня (море), ID в котобазе 50257
+    120 - Небесная яшма
+        крафтится из небесная яшма синяя, ID в котобазе 50259
+    и 20кк
+    """
+    blood_stone = 400
+    flame_stone = 240
+    jasper = 120
+    sum_blood_stone = calc(blood_stone, 50249) + calc(blood_stone, 50251)
+    sum_flame_stone = calc(flame_stone, 50255) + calc(flame_stone, 50257)
+    sum_jasper = calc(jasper, 50259)
+    return str('Купить 400 Кровавых камней выйдет за сумму ='+str(sum_blood_stone)+'\n'+'Купить 240 Огненных камней выйдет за сумму = '+str(sum_flame_stone)+'\n'+'Купить 120 небесной яшмы выйдет за сумму = '+str(sum_jasper)+'\n'+'За крафт пухи 20кк'+'\n'+'Итого сумма = '+str(int(sum_blood_stone)+int(sum_flame_stone)+int(sum_jasper)+20000000))
+    #return str(int(sum_blood_stone)+int(sum_flame_stone)+int(sum_jasper)+20000000)
+
+
+def calc(count, ID):
+    url = "https://pwcats.info/drakon"
+    url = url+'/'+str(ID)
+    g = Grab()
+    g.go(url, user_agent='Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/62.0.3202.94 YaBrowser/17.11.1.990 Yowser/2.5 Safari/537.36')
+    cost_list = g.doc.select('//*[@id = "sort_adw"]/tbody/tr[*]/td[5]/text()').node_list()
+    for i in range(0, cost_list.__len__()):
+        string = cost_list[i].replace(' ', '')
+        cost_list[i] = int(string)
+    # print(cost_list)
+    print(min(cost_list))
+    return min(cost_list)*count
