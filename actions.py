@@ -10,7 +10,7 @@ timestamp = datetime.datetime.now()
 date = timestamp.date()
 date_post = date
 caption = None
-
+""" 
 dictionary = {'кх 1': 'Зал героев',
               'кх 2': 'Медная терраса для птиц',
               'кх 3': '30 ур.',
@@ -81,7 +81,7 @@ dictionary = {'кх 1': 'Зал героев',
               'кх 68': 'С варварами',
               'кх 69': 'Чтобы разгадать тайну долины',
               'кх 70': 'Город Инея'
-              }
+              } """
 
 logging.basicConfig(
     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
@@ -214,14 +214,14 @@ def get_my_orders(bot, update):
                 else:
                     bot.sendPhoto(chat_id=uid_from_update(update), photo=results,
                                   reply_to_message_id=update.message.message_id, caption=caption)
-        if reply_text.startswith("кх") or reply_text.startswith("Кх") or reply_text.startswith("КХ"):
-            result = dictionary.get(reply_text.lower())
-            if chat_type == "group":
-                bot.sendMessage(chat_id=group_chat_id(update), text=result,
-                                reply_to_message_id=update.message.message_id)
-            else:
-                bot.sendMessage(chat_id=uid_from_update(update), text=result,
-                                reply_to_message_id=update.message.message_id)
+        # if reply_text.startswith("кх") or reply_text.startswith("Кх") or reply_text.startswith("КХ"):
+        #     result = dictionary.get(reply_text.lower())
+        #    if chat_type == "group":
+        #        bot.sendMessage(chat_id=group_chat_id(update), text=result,
+        #                        reply_to_message_id=update.message.message_id)
+        #    else:
+        #        bot.sendMessage(chat_id=uid_from_update(update), text=result,
+        #                        reply_to_message_id=update.message.message_id)
         if reply_text == "Голд" or reply_text == "голд":
             response = get_course_gold()
             if chat_type == "group":
