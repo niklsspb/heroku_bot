@@ -8,3 +8,4 @@
 6. переходим в каталог клонированного репозитария
 7. git push heroku master
 8. heroku: ps:scale bot=1
+ 
