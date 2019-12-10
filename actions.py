@@ -86,7 +86,7 @@ def get_every_day():
 
 
 def get_course_gold():
-    url = "https://pwcats.info/servers/drakon"
+    url = "https://pwcats.info/servers/scorpio"
     g = Grab()
     g.go(url, user_agent='Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) '
                          'Chrome/62.0.3202.94 '
@@ -270,7 +270,7 @@ def calc_weapon_cost():
 
 
 def calc(count, ID):
-    url = "https://pwcats.info/drakon"
+    url = "https://pwcats.info/scorpio"
     url = url+'/'+str(ID)
     g = Grab()
     g.go(url, user_agent='Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/62.0.3202.94 YaBrowser/17.11.1.990 Yowser/2.5 Safari/537.36')
