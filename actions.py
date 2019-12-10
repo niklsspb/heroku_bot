@@ -196,6 +196,14 @@ def get_my_orders(bot, update):
             else:
                 bot.sendMessage(chat_id=uid_from_update(update), text=response,
                                 reply_to_message_id=update.message.message_id)
+          if reply_text.lower()=='пуха 40 па':
+            response = calc_weapon_cost_40_pa()
+            if chat_type == "group":
+                bot.sendMessage(chat_id=group_chat_id(update), text=response,
+                                reply_to_message_id=update.message.message_id)
+            else:
+                bot.sendMessage(chat_id=uid_from_update(update), text=response,
+                                reply_to_message_id=update.message.message_id)
 
     else:
         pass
@@ -268,7 +276,34 @@ def calc_weapon_cost():
     return str('Купить 400 Кровавых камней выйдет за сумму ='+str(sum_blood_stone)+'\n'+'Купить 240 Огненных камней выйдет за сумму = '+str(sum_flame_stone)+'\n'+'Купить 120 небесной яшмы выйдет за сумму = '+str(sum_jasper)+'\n'+'За крафт пухи 20кк'+'\n'+'Итого сумма = '+str(int(sum_blood_stone)+int(sum_flame_stone)+int(sum_jasper)+20000000))
     #return str(int(sum_blood_stone)+int(sum_flame_stone)+int(sum_jasper)+20000000)
 
+def calc_weapon_cost_40_pa():
+    """
+    оружие на 30 па
+    Требуется:
+    400 - Кровавый камень
+        1 кровавый камень крафтится из:
+            1 фрагмента кровавого камня (небо), ID в котобазе 50249
+            1 фрагмента кровавого камня (море), ID в котобазе 50251
+    240 - Огненный камень
+        1 огненный камень крафтится из:
+            1 фрагмента огненного камня (небо), ID в котобазе 50255
+            1 фрагмента огненного камня (море), ID в котобазе 50257
+    120 - Небесная яшма
+        крафтится из небесная яшма синяя, ID в котобазе 50259
+    и 20кк
+    """
+    blood_stone = 1600
+    flame_stone = 960
+    jasper = 200
+    trees = 70
+    sum_blood_stone = calc(blood_stone, 50249) + calc(blood_stone, 50251)
+    sum_flame_stone = calc(flame_stone, 50255) + calc(flame_stone, 50257)
+    sum_jasper = calc(jasper, 50259)
+    sum_tree = calc(trees, 50261)
+    return str('Купить '+blood_stone+' Кровавых камней выйдет за сумму ='+str(sum_blood_stone)+'\n'+'Купить '+flame_stone+' Огненных камней выйдет за сумму = '+str(sum_flame_stone)+'\n'+'Купить '+jasper+' небесной яшмы выйдет за сумму = '+str(sum_jasper)+'\n'+'Купить 70 Дерево еретика Линсю выйдет за сумму='+str(sum_tree)+'\n'+'За крафт пухи 50кк'+'\n'+'Итого сумма = '+str(int(sum_blood_stone)+int(sum_flame_stone)+int(sum_jasper)+int(sum_tree)+50000000))
+    #return str(int(sum_blood_stone)+int(sum_flame_stone)+int(sum_jasper)+20000000)
 
+          
 def calc(count, ID):
     url = "https://pwcats.info/scorpio"
     url = url+'/'+str(ID)
