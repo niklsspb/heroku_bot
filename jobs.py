@@ -52,6 +52,7 @@ def get_every_day():
         res = json.loads(json_string)
         result = res['temp']['y_']
         url_image = url + result[0] + '.jpg'
+        url_image="http://www.kartinki.me/pic/201506/1920x1200/kartinki.me-21699.jpg"
         return url_image
     except IndexError:
         return None
