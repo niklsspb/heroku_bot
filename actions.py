@@ -71,9 +71,8 @@ def get_every_day():
     # list = g.doc.body.decode('cp1251')
     try:
         image = g.doc.select(
-            './/*[@id="wall_fixed"]/div/div/div/div/div[2]/div/div/div/div[2]/a/@onclick')[0].text()
-        caption = g.doc.select(
-            './/*[@id="wall_fixed"]/div/div/div/div/div[2]/div/div/div/div[1]')[0].text()
+            './/*[@id="public_wall"]/*[@id="page_wall_posts"]/div/div/div[2]/div[1]/div[1]/div[1]/div[2]/a[@aria-label]/@onclick')[0].text()
+        caption = 'Ежа'
         date_time = datetime.datetime.now()
         date_post = date_time.date()
         json_string = get_indexes(image)
