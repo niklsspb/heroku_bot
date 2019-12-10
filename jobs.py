@@ -37,7 +37,7 @@ def get_every_day():
     global date_post
     url = "https://pp.userapi.com/"
     g = Grab()
-    g.go("https://vk.com/dragpw",
+    g.go("https://vk.com/skorpw",
          user_agent='Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/62.0.3202.94 '
                     'YaBrowser/17.11.1.990 Yowser/2.5 Safari/537.36')
     # list = g.doc.body.decode('cp1251')

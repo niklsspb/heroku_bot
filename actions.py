@@ -32,7 +32,6 @@ logger = logging.getLogger(__name__)
 
 
 def get_chat_type(update):
-    
     chat_type = None
     try:
         chat_type = update.message.chat.type
@@ -71,7 +70,8 @@ def get_every_day():
     # list = g.doc.body.decode('cp1251')
     try:
         image = g.doc.select(
-            './/*[@id="public_wall"]/*[@id="page_wall_posts"]/div/div/div[2]/div[1]/div[1]/div[1]/div[2]/a[@aria-label]/@onclick')[0].text()
+            './/*[@id="public_wall"]/*[@id="page_wall_posts"]/div/div/div[2]/div[1]/div[1]/div[1]/div[2]/a[@aria-label]/@onclick')[
+            0].text()
         caption = 'Ежа'
         date_time = datetime.datetime.now()
         date_post = date_time.date()
@@ -182,12 +182,12 @@ def get_my_orders(bot, update):
             result = stones.get(reply_text.lower())
             print(result)
             if chat_type == "group":
-                bot.sendMessage(chat_id=group_chat_id(update), text='Нужно камней мироздания = '+result,
+                bot.sendMessage(chat_id=group_chat_id(update), text='Нужно камней мироздания = ' + result,
                                 reply_to_message_id=update.message.message_id)
             else:
-                bot.sendMessage(chat_id=uid_from_update(update), text='Нужно камней мироздания = '+result,
+                bot.sendMessage(chat_id=uid_from_update(update), text='Нужно камней мироздания = ' + result,
                                 reply_to_message_id=update.message.message_id)
-        if reply_text.lower()=='пуха 30 па':
+        if reply_text.lower() == 'пуха 30 па':
             response = calc_weapon_cost()
             if chat_type == "group":
                 bot.sendMessage(chat_id=group_chat_id(update), text=response,
@@ -195,7 +195,7 @@ def get_my_orders(bot, update):
             else:
                 bot.sendMessage(chat_id=uid_from_update(update), text=response,
                                 reply_to_message_id=update.message.message_id)
-          if reply_text.lower()=='пуха 40 па':
+        if reply_text.lower() == 'пуха 40 па':
             response = calc_weapon_cost_40_pa()
             if chat_type == "group":
                 bot.sendMessage(chat_id=group_chat_id(update), text=response,
@@ -250,6 +250,7 @@ def uid_from_update(update):
                     logging.error("No chat_id available in update.")
     return chat_id
 
+
 def calc_weapon_cost():
     """
     оружие на 30 па
@@ -272,8 +273,13 @@ def calc_weapon_cost():
     sum_blood_stone = calc(blood_stone, 50249) + calc(blood_stone, 50251)
     sum_flame_stone = calc(flame_stone, 50255) + calc(flame_stone, 50257)
     sum_jasper = calc(jasper, 50259)
-    return str('Купить 400 Кровавых камней выйдет за сумму ='+str(sum_blood_stone)+'\n'+'Купить 240 Огненных камней выйдет за сумму = '+str(sum_flame_stone)+'\n'+'Купить 120 небесной яшмы выйдет за сумму = '+str(sum_jasper)+'\n'+'За крафт пухи 20кк'+'\n'+'Итого сумма = '+str(int(sum_blood_stone)+int(sum_flame_stone)+int(sum_jasper)+20000000))
-    #return str(int(sum_blood_stone)+int(sum_flame_stone)+int(sum_jasper)+20000000)
+    return str('Купить 400 Кровавых камней выйдет за сумму =' + str(
+        sum_blood_stone) + '\n' + 'Купить 240 Огненных камней выйдет за сумму = ' + str(
+        sum_flame_stone) + '\n' + 'Купить 120 небесной яшмы выйдет за сумму = ' + str(
+        sum_jasper) + '\n' + 'За крафт пухи 20кк' + '\n' + 'Итого сумма = ' + str(
+        int(sum_blood_stone) + int(sum_flame_stone) + int(sum_jasper) + 20000000))
+    # return str(int(sum_blood_stone)+int(sum_flame_stone)+int(sum_jasper)+20000000)
+
 
 def calc_weapon_cost_40_pa():
     """
@@ -299,19 +305,25 @@ def calc_weapon_cost_40_pa():
     sum_flame_stone = calc(flame_stone, 50255) + calc(flame_stone, 50257)
     sum_jasper = calc(jasper, 50259)
     sum_tree = calc(trees, 50261)
-    return str('Купить '+blood_stone+' Кровавых камней выйдет за сумму ='+str(sum_blood_stone)+'\n'+'Купить '+flame_stone+' Огненных камней выйдет за сумму = '+str(sum_flame_stone)+'\n'+'Купить '+jasper+' небесной яшмы выйдет за сумму = '+str(sum_jasper)+'\n'+'Купить 70 Дерево еретика Линсю выйдет за сумму='+str(sum_tree)+'\n'+'За крафт пухи 50кк'+'\n'+'Итого сумма = '+str(int(sum_blood_stone)+int(sum_flame_stone)+int(sum_jasper)+int(sum_tree)+50000000))
-    #return str(int(sum_blood_stone)+int(sum_flame_stone)+int(sum_jasper)+20000000)
+    return str('Купить ' + blood_stone + ' Кровавых камней выйдет за сумму =' + str(
+        sum_blood_stone) + '\n' + 'Купить ' + flame_stone + ' Огненных камней выйдет за сумму = ' + str(
+        sum_flame_stone) + '\n' + 'Купить ' + jasper + ' небесной яшмы выйдет за сумму = ' + str(
+        sum_jasper) + '\n' + 'Купить 70 Дерево еретика Линсю выйдет за сумму=' + str(
+        sum_tree) + '\n' + 'За крафт пухи 50кк' + '\n' + 'Итого сумма = ' + str(
+        int(sum_blood_stone) + int(sum_flame_stone) + int(sum_jasper) + int(sum_tree) + 50000000))
+    # return str(int(sum_blood_stone)+int(sum_flame_stone)+int(sum_jasper)+20000000)
 
-          
+
 def calc(count, ID):
     url = "https://pwcats.info/scorpio"
-    url = url+'/'+str(ID)
+    url = url + '/' + str(ID)
     g = Grab()
-    g.go(url, user_agent='Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/62.0.3202.94 YaBrowser/17.11.1.990 Yowser/2.5 Safari/537.36')
+    g.go(url,
+         user_agent='Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/62.0.3202.94 YaBrowser/17.11.1.990 Yowser/2.5 Safari/537.36')
     cost_list = g.doc.select('//*[@id = "sort_adw"]/tbody/tr[*]/td[5]/text()').node_list()
     for i in range(0, cost_list.__len__()):
         string = cost_list[i].replace(' ', '')
         cost_list[i] = int(string)
     # print(cost_list)
     print(min(cost_list))
-    return min(cost_list)*count
+    return min(cost_list) * count
